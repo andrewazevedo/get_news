@@ -3,12 +3,10 @@ import axios from 'axios';
 import Header from './components/header';
 import PostsList from './components/posts_list';
 import MuiThemeProvider from 'material-ui/styles/MuiThemeProvider';
-import './App.css';
-
 import { Grid, Col, Row } from 'react-bootstrap';
-
-const ENDPOINT = 'https://newsapi.org/v1/articles';
-const API_KEY = '015fa2772f3e4b78af5b1c01a7829d15';
+import './App.css';
+import { ENDPOINT, API_KEY } from './components/posts_list/constants';
+import { fetchPosts } from './components/posts_list/actions';
 
 class App extends Component {
   state = {
@@ -19,7 +17,7 @@ class App extends Component {
     axios.get(`${ENDPOINT}?source=techcrunch&sortBy=latest&apiKey=${API_KEY}`)
       .then(resp => {
         console.log(resp);
-        this.setState({ articles: resp.data.articles })
+        this.setState({ articles: resp.data.articles });
       }).catch(err => {
         console.log(err);
       });
@@ -28,14 +26,18 @@ class App extends Component {
   render() {
     return (
       <MuiThemeProvider>
-      <Grid>
-        <Row>
-          <Col md={8} mdOffset={2}>
-            <Header />
-            <PostsList articles={this.state.articles} />
-          </Col>
-        </Row>
-      </Grid>
+        <Grid className="container">
+          <Row>
+            <Col md={12}>
+              <Header />
+            </Col>
+          </Row>
+          <Row>
+            <Col md={8} mdOffset={2}>
+              <PostsList articles={this.state.articles} />
+            </Col>
+          </Row>
+        </Grid>
     </MuiThemeProvider>
     );
   }
